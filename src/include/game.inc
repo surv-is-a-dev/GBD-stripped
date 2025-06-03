@@ -55,28 +55,10 @@ DEF bJoypadDown EQU $C020
 ; - Bit 7 (`BUTTON_START`) - Start
 DEF bJoypadPressed EQU $C021
 
-; WRAM location for Object (Sprite) OAM data that is transferred to VRAM via DMA
-; at the end of each frame during the VBLANK period.
-DEF pSpriteOAM EQU $C100
-
-; WRAM copy of the level data that is used to handle game mechanics and events.
-DEF pLevelData EQU $D000
-
 ; ------------------------------------------------------------------------------
 ; Constants
 ; ------------------------------------------------------------------------------
 
-; Length of the OAM data region, in bytes.
-DEF len_SpriteOAM EQU 160
-
-; Number of bytes in the tileset for the game.
-DEF len_Tileset EQU 6144
-
-; Number of bytes in the level's tilemap.
-DEF len_LevelTilemap EQU 1024
-
-; Number of bytes int the level data.
-DEF len_LevelData EQU 1024
 
 ; Button mask for the right D-PAD button.
 DEF BUTTON_RIGHT  EQU 1 << 0

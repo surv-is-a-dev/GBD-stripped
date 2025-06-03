@@ -13,11 +13,10 @@ VERSION := 0
 GAMEID := GBDV
 
 # Game title, up to 11 ASCII chars
-TITLE := GAMEBOYDEV
+TITLE := GBVSTRIPPED
 
 # New licensee, 2 ASCII chars
-# Homebrew games FTW!
-LICENSEE := HB
+LICENSEE := MS
 # Old licensee, please set to 0x33 (required to get SGB compatibility)
 OLDLIC := 0x33
 
@@ -34,14 +33,11 @@ MBC := 0x00
 SRAMSIZE := 0x00
 
 # ROM name
-ROMNAME := GameBoyDev
+ROMNAME := GBVSTRIPPED
 ROMEXT  := gb
 
 # Compilation parameters, uncomment to apply, comment to cancel
 # "Sensible defaults" are included
-
-# Disable automatic `nop` after `halt`
-ASFLAGS += -h
 
 # Export all labels
 # This means they must all have unique names, but they will all show up in the

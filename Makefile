@@ -36,12 +36,12 @@ ROM = $(BINDIR)/$(ROMNAME).$(ROMEXT)
 # Argument constants
 INCDIRS  = src/ src/include/ src/bin/
 WARNINGS = all extra
-ASFLAGS  = -v -L -p $(PADVALUE) $(addprefix -i,$(INCDIRS)) $(addprefix -W,$(WARNINGS))
+ASFLAGS  = -v -p $(PADVALUE) $(addprefix --include ,$(INCDIRS)) $(addprefix -W,$(WARNINGS))
 LDFLAGS  = -p $(PADVALUE)
 FIXFLAGS = -p $(PADVALUE) -v -i "$(GAMEID)" -k "$(LICENSEE)" -l $(OLDLIC) -m $(MBC) -n $(VERSION) -r $(SRAMSIZE) -t $(TITLE)
 
 # The list of "root" ASM files that RGBASM will be invoked on
-SRCS = $(wildcard src/*.asm)
+SRCS = $(wildcard src/*.z80)
 
 ## Project-specific configuration
 # Use this to override the above
@@ -79,9 +79,9 @@ rebuild:
 ###############################################
 
 # How to build a ROM
-$(BINDIR)/%.$(ROMEXT) $(BINDIR)/%.sym $(BINDIR)/%.map: $(patsubst src/%.asm,$(OBJDIR)/%.o,$(SRCS))
+$(BINDIR)/%.$(ROMEXT) $(BINDIR)/%.sym $(BINDIR)/%.map: $(patsubst src/%.z80,$(OBJDIR)/%.o,$(SRCS))
 	@$(MKDIR_P) $(@D)
-	$(RGBASM) $(ASFLAGS) -o $(OBJDIR)/build_date.o src/res/build_date.asm
+	$(RGBASM) $(ASFLAGS) -o $(OBJDIR)/build_date.o src/res/build_date.z80
 	$(RGBLINK) $(LDFLAGS) -m $(BINDIR)/$*.map -n $(BINDIR)/$*.sym -o $(BINDIR)/$*.$(ROMEXT) $^ $(OBJDIR)/build_date.o \
 	&& $(RGBFIX) -v $(FIXFLAGS) $(BINDIR)/$*.$(ROMEXT)
 
@@ -89,12 +89,12 @@ $(BINDIR)/%.$(ROMEXT) $(BINDIR)/%.sym $(BINDIR)/%.map: $(patsubst src/%.asm,$(OB
 # Also add all obj dependencies to the dep file too, so Make knows to remake it
 # Caution: some of these flags were added in RGBDS 0.4.0, using an earlier version WILL NOT WORK
 # (and produce weird errors)
-$(OBJDIR)/%.o $(DEPDIR)/%.mk: src/%.asm
+$(OBJDIR)/%.o $(DEPDIR)/%.mk: src/%.z80
 	@$(MKDIR_P) $(patsubst %/,%,$(dir $(OBJDIR)/$* $(DEPDIR)/$*))
 	$(RGBASM) $(ASFLAGS) -M $(DEPDIR)/$*.mk -MG -MP -MQ $(OBJDIR)/$*.o -MQ $(DEPDIR)/$*.mk -o $(OBJDIR)/$*.o $<
 
 ifneq ($(MAKECMDGOALS),clean)
--include $(patsubst src/%.asm,$(DEPDIR)/%.mk,$(SRCS))
+-include $(patsubst src/%.z80,$(DEPDIR)/%.mk,$(SRCS))
 endif
 
 ################################################
